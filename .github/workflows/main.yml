@@ -1,4 +1,6 @@
 name: Build Vue
+permissions:
+  contents: write
 on: [push]
 jobs:
   build_vue:
