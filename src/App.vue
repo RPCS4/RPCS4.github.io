@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import 'vfonts/FiraSans.css';
 
-import { defineComponent, ref } from 'vue';
+import { ref } from 'vue';
 
-import { GlobalThemeOverrides, darkTheme, NLayout } from 'naive-ui'
+import { GlobalThemeOverrides, darkTheme, NLayout } from 'naive-ui';
 import { BuiltInGlobalTheme } from 'naive-ui/es/themes/interface';
 import { CardThemeVars } from 'naive-ui/es/card/styles';
 import { TypographyThemeVars } from 'naive-ui/es/typography/styles';
@@ -11,11 +11,17 @@ import { GradientTextThemeVars } from 'naive-ui/es/gradient-text/styles';
 import { MenuThemeVars } from 'naive-ui/es/menu/styles';
 import { ButtonThemeVars } from 'naive-ui/es/button/styles';
 
+const theme = ref<BuiltInGlobalTheme | null>(darkTheme);
+
+function toggleTheme() {
+  theme.value = theme.value == null ? darkTheme : null;
+}
+
 const menuOverrides: Partial<MenuThemeVars> = {
   fontSize: '12pt',
   itemTextColorActiveHorizontal: '#4C3E9C',
   itemIconColorActiveHorizontal: '#4C3E9C',
-}
+};
 
 const darkMenu: Partial<MenuThemeVars> = {
   ...menuOverrides,
@@ -23,7 +29,7 @@ const darkMenu: Partial<MenuThemeVars> = {
   groupTextColor: '#F8F2F1',
   itemTextColorHoverHorizontal: '#739AF0',
   itemIconColorHoverHorizontal: '#739AF0',
-}
+};
 
 const lightMenu: Partial<MenuThemeVars> = {
   ...menuOverrides,
@@ -31,13 +37,13 @@ const lightMenu: Partial<MenuThemeVars> = {
   itemTextColorHorizontal: '#121420',
   itemTextColorHoverHorizontal: '#1D5DEC',
   itemIconColorHoverHorizontal: '#1D5DEC',
-}
+};
 
 const gradientTextOverrides: Partial<GradientTextThemeVars> = {
   rotate: '188deg',
   colorEndInfo: '#3633fa',
   colorStartInfo: '#9600ff',
-}
+};
 
 const typographyOverrides: Partial<TypographyThemeVars> = {
   headerFontSize1: '30pt',
@@ -45,17 +51,17 @@ const typographyOverrides: Partial<TypographyThemeVars> = {
   headerFontSize2: '18pt',
   headerFontSize3: '14pt',
   headerMargin3: '0px',
-}
+};
 
 const darkTypography: Partial<TypographyThemeVars> = {
   ...typographyOverrides,
   textColor: '#F8F2F1'
-}
+};
 
 const lightTypography: Partial<TypographyThemeVars> = {
   ...typographyOverrides,
   textColor: '#121420'
-}
+};
 
 const cardOverrides: Partial<CardThemeVars> = {
   titleFontWeight: 'bold',
@@ -64,20 +70,20 @@ const cardOverrides: Partial<CardThemeVars> = {
   titleFontSizeSmall: '16pt',
   fontSizeMedium: '12pt',
   borderRadius: '20px'
-}
+};
 
 const lightCard: Partial<CardThemeVars> = {
   ...cardOverrides,
   borderColor: '#1D5DEC',
   color: '#f9f9f8'
-}
+};
 
 const buttonOverrides: Partial<ButtonThemeVars> = {
   textColorHover: '#3633fa',
   borderHover: '1px solid #3633fa',
   textColorFocus: '#a2a1ff',
   borderFocus: '1px solid #a2a1ff'
-}
+};
 
 const lightThemeOverrides: GlobalThemeOverrides = {
   common: {
@@ -164,19 +170,6 @@ const darkThemeOverrides: GlobalThemeOverrides = {
     </n-layout>
   </n-config-provider>
 </template>
-
-<script lang="ts">
-var theme = ref<BuiltInGlobalTheme | null>(darkTheme);
-
-export default defineComponent({
-  props: ['theme'],
-  methods: {
-    toggleTheme() {
-      theme.value = theme.value == null ? darkTheme : null;
-    }
-  }
-})
-</script>
 
 <style scoped>
 .n-layout {

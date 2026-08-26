@@ -1,55 +1,24 @@
 <script setup lang="ts">
-import { h, defineComponent, Component } from 'vue'
-import { NIcon, MenuOption, MenuGroupOption, MenuDividerOption } from 'naive-ui'
+import { h, ref, Component } from 'vue'
+import { NIcon, MenuOption } from 'naive-ui'
 import {
   Code as CodeIcon,
   Book as BookIcon,
   LogoDiscord as DiscordIcon,
-  Moon as MoonIcon, Sun as SunIcon
+  Moon as MoonIcon,
+  Sun as SunIcon
 } from '@vicons/carbon'
-import { html, load } from 'cheerio'
 
-const props = defineProps({
-  themex: {
-    type: Object
-  },
-  toggle: {
-    type: Function,
-    required: true
-  }
-})
+defineProps<{
+  themex?: object | null
+  toggle: () => void
+}>()
 
 function renderIcon(icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 
-var activeKey: any = null
-
-// Web scraping
-// AKA the reason this component is async
-const page = await fetch("https://github.com/RPCS4/rpcs4/wiki/")
-const cont = await page.text();
-const $ = load(cont)
-const pages = $("li.libdoc-sidebar-item > a")
-var wikiLinks: (MenuOption | MenuGroupOption | MenuDividerOption)[] = []
-for (let index = 0; index < pages.length; index++) {
-  const element = pages[index];
-  const linkName = element.children[0].data.trim() // The property does exist just trust me bro
-
-  wikiLinks[index] = {
-    label: () =>
-      h(
-        'a',
-        {
-          href: 'https://rpcs4.github.io' + element.attribs.href,
-          target: '_blank',
-          rel: 'noopenner noreferrer'
-        },
-        linkName
-      ),
-    key: 'wiki-' + linkName
-  }
-}
+const activeKey = ref<string | null>(null)
 
 const menuOptions: MenuOption[] = [
   {
@@ -57,9 +26,9 @@ const menuOptions: MenuOption[] = [
       h(
         'a',
         {
-          href: 'https://github.com/RPCS4/rpcs4',
+          href: 'https://github.com/RPCS4/RPCS4.github.io',
           target: '_blank',
-          rel: 'noopenner noreferrer'
+          rel: 'noopener noreferrer'
         },
         'development'
       ),
@@ -67,10 +36,18 @@ const menuOptions: MenuOption[] = [
     icon: renderIcon(CodeIcon)
   },
   {
-    label: 'wiki',
+    label: () =>
+      h(
+        'a',
+        {
+          href: 'https://github.com/RPCS4/RPCS4.github.io/wiki',
+          target: '_blank',
+          rel: 'noopener noreferrer'
+        },
+        'wiki'
+      ),
     key: 'wiki',
-    icon: renderIcon(BookIcon),
-    children: wikiLinks
+    icon: renderIcon(BookIcon)
   },
   {
     label: () =>
@@ -79,7 +56,7 @@ const menuOptions: MenuOption[] = [
         {
           href: 'https://discord.com/invite/gqz8APTfbE',
           target: '_blank',
-          rel: 'noopenner noreferrer'
+          rel: 'noopener noreferrer'
         },
         'discuss'
       ),
@@ -124,21 +101,12 @@ const menuOptions: MenuOption[] = [
   </div>
 </template>
 
-<script lang="ts">
-export default defineComponent({
-  methods: {
-    toggleTheme() {
-      props.toggle()
-    }
-  }
-})
-</script>
-
 <style scoped>
 .bar-wrapper {
-  display: inline-block;
+  display: flex;
   flex-flow: row nowrap;
-  text-align: center;
+  align-items: center;
+  justify-content: space-between;
   margin: 8px;
 }
 </style>
