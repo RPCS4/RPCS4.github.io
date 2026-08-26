@@ -2,18 +2,33 @@
 import { NText, NGradientText } from 'naive-ui';
 
 function getTime() {
-  const divmod = (x: any, y: any) => [Math.floor(x / y), x % y]; // Utility
+  const divmod = (x: any, y: any) => [Math.floor(x / y), x % y];
 
-  var developmentStart = new Date(2016, 6, 18); // Rough estimate of when DH left RPCS3
+  var developmentStart = new Date(2016, 6, 18);
   var today = new Date();
-  const months = (today.getFullYear() - developmentStart.getFullYear()) * 12 - developmentStart.getMonth() + today.getMonth() + 1; // Months between start and today
-  var time_result = divmod(months, 12); // [years, partial year's months]
-  return months > 12 ? (time_result[0] + Math.round(time_result[1] / 12 * 10) / 10) + " years" : months + "months";
+
+  const months =
+    (today.getFullYear() - developmentStart.getFullYear()) * 12 -
+    developmentStart.getMonth() +
+    today.getMonth() +
+    1;
+
+  var time_result = divmod(months, 12);
+
+  return months > 12
+    ? (time_result[0] + Math.round(time_result[1] / 12 * 10) / 10) + " years"
+    : months + " months";
 }
 
-const response = await fetch('https://api.github.com/repos/rpcs4/rpcs4/contributors?per_page=1')
-const headers = response.headers
-var contributors = headers.get('link')?.match(/&page=(\d+)>; rel="last"/)[1]
+const response = await fetch(
+  'https://api.github.com/repos/rpcs4/rpcs4/contributors?per_page=1'
+);
+
+const headers = response.headers;
+
+var contributors = headers
+  .get('link')
+  ?.match(/&page=(\d+)>; rel="last"/)?.[1];
 </script>
 
 <template>
@@ -25,17 +40,22 @@ var contributors = headers.get('link')?.match(/&page=(\d+)>; rel="last"/)[1]
       >
         RPCS4
       </n-gradient-text>
+
       <n-gradient-text type="info">
         {{ getTime() }}
       </n-gradient-text>
+
       <n-text>of development.</n-text>
     </div>
+
     <div class="hook-item">
       <n-gradient-text type="info">
         {{ contributors }}
       </n-gradient-text>
+
       <n-text>experienced contributors.</n-text>
     </div>
+  </div>
 </template>
 
 <style scoped>
