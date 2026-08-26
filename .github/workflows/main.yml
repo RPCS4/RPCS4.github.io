@@ -1,17 +1,61 @@
 name: Build Vue
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
 permissions:
-  contents: write
-on: [push]
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build_vue:
     if: github.repository_owner == 'RPCS4'
     runs-on: ubuntu-latest
     name: Build Vue
+
     steps:
-    - uses: actions/checkout@v2
-    - id: Build-Vue
-      uses: xRealNeon/VuePagesAction@1.0.1
-      with:
-        username: 'RPCS4'
-        reponame: 'rpcs4.github.io'
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Vue
+        run: npm run build
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build_vue
+    if: github.repository_owner == 'RPCS4'
+    runs-on: ubuntu-latest
+    name: Deploy to GitHub Pages
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
