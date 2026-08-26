@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import { NText, NGradientText } from 'naive-ui';
 
 function getTime() {
-  const developmentStart = new Date(2026, 5, 1); // June 2026
+  const developmentStart = new Date(2023, 5, 1); // June 2023
   const today = new Date();
 
   const months =
@@ -19,15 +20,23 @@ function getTime() {
     : `${months} months`;
 }
 
-const response = await fetch(
-  'https://api.github.com/repos/rpcs4/rpcs4/contributors?per_page=1'
-);
+const contributors = ref<string | number>('1+');
 
-const headers = response.headers;
-
-var contributors = headers
-  .get('link')
-  ?.match(/&page=(\d+)>; rel="last"/)?.[1];
+onMounted(async () => {
+  try {
+    const response = await fetch(
+      'https://api.github.com/repos/RPCS4/RPCS4.github.io/contributors?per_page=100'
+    );
+    if (response.ok) {
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        contributors.value = data.length;
+      }
+    }
+  } catch (e) {
+    console.error('Failed to fetch contributors:', e);
+  }
+});
 </script>
 
 <template>
