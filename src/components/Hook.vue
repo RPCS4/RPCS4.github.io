@@ -2,22 +2,21 @@
 import { NText, NGradientText } from 'naive-ui';
 
 function getTime() {
-  const divmod = (x: any, y: any) => [Math.floor(x / y), x % y];
-
-  var developmentStart = new Date(2016, 6, 18);
-  var today = new Date();
+  const developmentStart = new Date(2026, 5, 1); // June 2026
+  const today = new Date();
 
   const months =
-    (today.getFullYear() - developmentStart.getFullYear()) * 12 -
-    developmentStart.getMonth() +
-    today.getMonth() +
-    1;
+    (today.getFullYear() - developmentStart.getFullYear()) * 12 +
+    today.getMonth() - developmentStart.getMonth();
 
-  var time_result = divmod(months, 12);
+  const time_result = [
+    Math.floor(months / 12),
+    months % 12
+  ];
 
-  return months > 12
-    ? (time_result[0] + Math.round(time_result[1] / 12 * 10) / 10) + " years"
-    : months + " months";
+  return months >= 12
+    ? `${time_result[0]} years${time_result[1] > 0 ? `, ${time_result[1]} months` : ''}`
+    : `${months} months`;
 }
 
 const response = await fetch(
