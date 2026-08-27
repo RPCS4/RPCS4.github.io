@@ -4,15 +4,8 @@ import { NIcon, MenuOption } from 'naive-ui'
 import {
   Code as CodeIcon,
   Book as BookIcon,
-  LogoDiscord as DiscordIcon,
-  Moon as MoonIcon,
-  Sun as SunIcon
+  LogoDiscord as DiscordIcon
 } from '@vicons/carbon'
-
-defineProps<{
-  themex?: object | null
-  toggle: () => void
-}>()
 
 function renderIcon(icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -86,18 +79,6 @@ const menuOptions: MenuOption[] = [
       mode="horizontal"
       :options="menuOptions"
     />
-    <n-button
-      circle
-      class="dark-mode-button"
-      @click="toggle"
-    >
-      <template #icon>
-        <n-icon>
-          <MoonIcon v-if="themex == null" />
-          <SunIcon v-else />
-        </n-icon>
-      </template>
-    </n-button>
   </div>
 </template>
 

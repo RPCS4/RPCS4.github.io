@@ -1,21 +1,12 @@
 <script setup lang="ts">
 import 'vfonts/FiraSans.css';
 
-import { ref } from 'vue';
-
 import { GlobalThemeOverrides, darkTheme, NLayout } from 'naive-ui';
-import { BuiltInGlobalTheme } from 'naive-ui/es/themes/interface';
 import { CardThemeVars } from 'naive-ui/es/card/styles';
 import { TypographyThemeVars } from 'naive-ui/es/typography/styles';
 import { GradientTextThemeVars } from 'naive-ui/es/gradient-text/styles';
 import { MenuThemeVars } from 'naive-ui/es/menu/styles';
 import { ButtonThemeVars } from 'naive-ui/es/button/styles';
-
-const theme = ref<BuiltInGlobalTheme | null>(darkTheme);
-
-function toggleTheme() {
-  theme.value = theme.value == null ? darkTheme : null;
-}
 
 const menuOverrides: Partial<MenuThemeVars> = {
   fontSize: '12pt',
@@ -29,14 +20,6 @@ const darkMenu: Partial<MenuThemeVars> = {
   groupTextColor: '#F8F2F1',
   itemTextColorHoverHorizontal: '#739AF0',
   itemIconColorHoverHorizontal: '#739AF0',
-};
-
-const lightMenu: Partial<MenuThemeVars> = {
-  ...menuOverrides,
-  groupTextColor: '#121420',
-  itemTextColorHorizontal: '#121420',
-  itemTextColorHoverHorizontal: '#1D5DEC',
-  itemIconColorHoverHorizontal: '#1D5DEC',
 };
 
 const gradientTextOverrides: Partial<GradientTextThemeVars> = {
@@ -58,11 +41,6 @@ const darkTypography: Partial<TypographyThemeVars> = {
   textColor: '#F8F2F1'
 };
 
-const lightTypography: Partial<TypographyThemeVars> = {
-  ...typographyOverrides,
-  textColor: '#121420'
-};
-
 const cardOverrides: Partial<CardThemeVars> = {
   titleFontWeight: 'bold',
   titleFontSizeHuge: '16pt',
@@ -72,31 +50,11 @@ const cardOverrides: Partial<CardThemeVars> = {
   borderRadius: '20px'
 };
 
-const lightCard: Partial<CardThemeVars> = {
-  ...cardOverrides,
-  borderColor: '#1D5DEC',
-  color: '#f9f9f8'
-};
-
 const buttonOverrides: Partial<ButtonThemeVars> = {
   textColorHover: '#3633fa',
   borderHover: '1px solid #3633fa',
   textColorFocus: '#a2a1ff',
   borderFocus: '1px solid #a2a1ff'
-};
-
-const lightThemeOverrides: GlobalThemeOverrides = {
-  common: {
-    baseColor: '#F8F2F1',
-    primaryColor: '#121420',
-    fontFamily: 'v-sans',
-    cardColor: '#F8F2F1'
-  },
-  Typography: lightTypography,
-  Card: lightCard,
-  GradientText: gradientTextOverrides,
-  Menu: lightMenu,
-  Button: buttonOverrides,
 };
 
 const darkThemeOverrides: GlobalThemeOverrides = {
@@ -115,17 +73,14 @@ const darkThemeOverrides: GlobalThemeOverrides = {
 
 <template>
   <n-config-provider
-    :theme="theme"
-    :theme-overrides="theme === null ? lightThemeOverrides : darkThemeOverrides"
+    :theme="darkTheme"
+    :theme-overrides="darkThemeOverrides"
   >
     <n-layout>
       <div class="wrapper">
         <div class="top-portion-wrapper">
           <Suspense>
-            <TopBarMenu
-              :themex="theme"
-              :toggle="toggleTheme"
-            />
+            <TopBarMenu />
           </Suspense>
 
           <div class="columns">
@@ -135,7 +90,7 @@ const darkThemeOverrides: GlobalThemeOverrides = {
             >
               <div class="top-main">
                 <Suspense>
-                  <Hook :themex="theme" />
+                  <Hook />
                 </Suspense>
               </div>
 
@@ -147,7 +102,7 @@ const darkThemeOverrides: GlobalThemeOverrides = {
               class="column"
             >
               <div class="top-right">
-                <MainCard :themex="theme" />
+                <MainCard />
               </div>
 
               <div class="column-content">
@@ -192,10 +147,6 @@ const darkThemeOverrides: GlobalThemeOverrides = {
 
 .layout-dark {
   background-image: url('/assets/background-dark.png');
-}
-
-.layout-light {
-  background-image: url('/assets/background-light.png');
 }
 
 .wrapper {
